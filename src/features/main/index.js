@@ -1,6 +1,6 @@
 import React from "react";
 
-import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
+import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 
 import FormikHolidayForm from "../bookHoliday/holiday";
 import DisplayBookedHolidays from "../displayBookedHolidays";
@@ -9,7 +9,7 @@ import Nav from "../nav";
 
 import styled from "styled-components";
 
-import { Flex, Box } from "@rebass/grid";
+import { Flex } from "@rebass/grid";
 
 const Container = styled(Flex)`
   max-width: 1024px;

@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { useSelector, useDispatch } from "react-redux";
+import { useDispatch } from "react-redux";
 import { useFormik } from "formik";
 import { useHistory } from "react-router-dom";
 
@@ -20,7 +20,7 @@ import {
 import { Flex, Box } from "@rebass/grid";
 import CircularProgress from "@material-ui/core/CircularProgress";
 
-import { selectRequestedHolidays, addHolidays } from "./holidaySlice";
+import { addHolidays } from "./holidaySlice";
 import styled from "styled-components";
 
 const StyledBox = styled(Box)`
@@ -38,7 +38,6 @@ const initalState = {
 };
 
 const FormikHolidayForm = (props) => {
-  const requestedHolidays = useSelector(selectRequestedHolidays);
   const history = useHistory();
 
   const handleRedirect = (url) => history.push(url);
@@ -77,9 +76,12 @@ const FormikHolidayForm = (props) => {
     setFieldValue,
   } = formik;
 
+  const { validateForm } = formik;
+
   useEffect(() => {
-    (() => formik.validateForm())();
-  }, []);
+    (() => validateForm())();
+  }, [validateForm]);
+
   return (
     <form onSubmit={handleSubmit}>
       <Flex alignContent="center">
