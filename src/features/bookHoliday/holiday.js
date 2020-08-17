@@ -1,9 +1,12 @@
 import React, { useEffect } from "react";
+
 import { useDispatch } from "react-redux";
 import { useFormik } from "formik";
 import { useHistory } from "react-router-dom";
 
-import validationSchema from "./validationSchema";
+import { Flex, Box } from "@rebass/grid";
+import styled from "styled-components";
+
 import InputLabel from "@material-ui/core/InputLabel";
 import MenuItem from "@material-ui/core/MenuItem";
 import FormHelperText from "@material-ui/core/FormHelperText";
@@ -16,12 +19,10 @@ import {
   MuiPickersUtilsProvider,
   KeyboardDatePicker,
 } from "@material-ui/pickers";
-
-import { Flex, Box } from "@rebass/grid";
 import CircularProgress from "@material-ui/core/CircularProgress";
 
+import validationSchema from "./validationSchema";
 import { addHolidays } from "./holidaySlice";
-import styled from "styled-components";
 
 const StyledBox = styled(Box)`
   height: 70px;
@@ -37,6 +38,8 @@ const initalState = {
   email: "",
 };
 
+const FullWidth = { width: "100%" };
+
 const FormikHolidayForm = (props) => {
   const history = useHistory();
 
@@ -45,7 +48,7 @@ const FormikHolidayForm = (props) => {
 
   const today = new Date();
 
-  const onSubmitHandler = async (values, actions) => {
+  const onSubmitHandler = async (values) => {
     const timestamp = Date.now();
     await new Promise((resolve) =>
       setTimeout(() => {
@@ -74,9 +77,8 @@ const FormikHolidayForm = (props) => {
     handleBlur,
     handleSubmit,
     setFieldValue,
+    validateForm,
   } = formik;
-
-  const { validateForm } = formik;
 
   useEffect(() => {
     (() => validateForm())();
@@ -87,7 +89,7 @@ const FormikHolidayForm = (props) => {
       <Flex alignContent="center">
         <StyledBox width={1 / 3} mr={5}>
           <TextField
-            style={{ width: "100%" }}
+            style={FullWidth}
             label="Vorname"
             name="firstName"
             values={values.firstName}
@@ -101,7 +103,7 @@ const FormikHolidayForm = (props) => {
         </StyledBox>
         <StyledBox width={1 / 3} mr={5}>
           <TextField
-            style={{ width: "100%" }}
+            style={FullWidth}
             label="Nachname"
             name="lastName"
             values={values.lastName}
@@ -116,7 +118,7 @@ const FormikHolidayForm = (props) => {
 
         <StyledBox width={1 / 3}>
           <TextField
-            style={{ width: "100%" }}
+            style={FullWidth}
             label="e-Mail"
             name="email"
             values={values.email}
@@ -130,7 +132,7 @@ const FormikHolidayForm = (props) => {
       <Flex>
         <StyledBox width={1 / 2} mr={5}>
           <FormControl
-            style={{ width: "100%" }}
+            style={FullWidth}
             error={Boolean(errors.unit && touched.unit)}
           >
             <InputLabel>Abteilung</InputLabel>
@@ -152,7 +154,7 @@ const FormikHolidayForm = (props) => {
 
         <StyledBox width={1 / 2}>
           <FormControl
-            style={{ width: "100%" }}
+            style={FullWidth}
             error={Boolean(errors.holidayType && touched.holidayType)}
           >
             <InputLabel>Art des Urlaubs</InputLabel>
@@ -175,13 +177,13 @@ const FormikHolidayForm = (props) => {
       <Flex>
         <StyledBox width={1 / 2} mr={5}>
           <FormControl
-            style={{ width: "100%" }}
+            style={FullWidth}
             error={Boolean(errors.dateFrom && touched.dateFrom)}
           >
             <MuiPickersUtilsProvider utils={DateFnsUtils}>
               <KeyboardDatePicker
                 error={Boolean(errors.dateFrom && touched.dateFrom)}
-                style={{ width: "100%" }}
+                style={FullWidth}
                 minDate={today}
                 margin="normal"
                 name="dateFrom"
@@ -203,7 +205,7 @@ const FormikHolidayForm = (props) => {
 
         <StyledBox width={1 / 2}>
           <FormControl
-            style={{ width: "100%" }}
+            style={FullWidth}
             error={Boolean(errors.dateTo && touched.dateTo)}
           >
             <MuiPickersUtilsProvider utils={DateFnsUtils}>

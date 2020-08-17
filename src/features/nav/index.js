@@ -68,7 +68,7 @@ const Nav = (props) => {
       <Flex flex="1 1 auto" style={{ maxHeight: " 70px" }}>
         <Box width={1 / 4}>
           <StyledLogo src={Logo} />
-          <StyledText>Coding Challange</StyledText>
+          <StyledText>Coding Challenge</StyledText>
         </Box>
         <Box width={1} />
         <Box width={1 / 4}>
