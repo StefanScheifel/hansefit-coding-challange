@@ -70,9 +70,9 @@ const Nav = (props) => {
           <StyledLogo src={Logo} />
           <StyledText>Coding Challange</StyledText>
         </Box>
-        <Box width={1}/>
+        <Box width={1} />
         <Box width={1 / 4}>
-          <StyledButton onClick={() => handleRedirect("/holiday")}>
+          <StyledButton onClick={() => handleRedirect("/")}>
             Urlaub beantragen
           </StyledButton>
         </Box>

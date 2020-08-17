@@ -1,6 +1,8 @@
 import React, { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useFormik } from "formik";
+import { useHistory } from "react-router-dom";
+
 import validationSchema from "./validationSchema";
 import InputLabel from "@material-ui/core/InputLabel";
 import MenuItem from "@material-ui/core/MenuItem";
@@ -16,6 +18,7 @@ import {
 } from "@material-ui/pickers";
 
 import { Flex, Box } from "@rebass/grid";
+import CircularProgress from "@material-ui/core/CircularProgress";
 
 import { selectRequestedHolidays, addHolidays } from "./holidaySlice";
 import styled from "styled-components";
@@ -36,17 +39,24 @@ const initalState = {
 
 const FormikHolidayForm = (props) => {
   const requestedHolidays = useSelector(selectRequestedHolidays);
+  const history = useHistory();
+
+  const handleRedirect = (url) => history.push(url);
   const dispatch = useDispatch();
 
   const today = new Date();
 
-  const onSubmitHandler = (values) => {
+  const onSubmitHandler = async (values, actions) => {
     const timestamp = Date.now();
-    setTimeout(() => {
-      values.dateFrom = values.dateFrom.getTime();
-      values.dateTo = values.dateTo.getTime();
-      dispatch(addHolidays(values, timestamp));
-    }, 1000);
+    await new Promise((resolve) =>
+      setTimeout(() => {
+        values.dateFrom = values.dateFrom.getTime();
+        values.dateTo = values.dateTo.getTime();
+        dispatch(addHolidays(values, timestamp));
+        handleRedirect("/bookedHolidays");
+        resolve();
+      }, 1000)
+    );
   };
 
   const formik = useFormik({
@@ -66,105 +76,109 @@ const FormikHolidayForm = (props) => {
     handleSubmit,
     setFieldValue,
   } = formik;
+
   useEffect(() => {
     (() => formik.validateForm())();
   }, []);
-  console.log(formik);
   return (
-    <div>
-      <form onSubmit={handleSubmit}>
-        <Flex alignContent="center">
-          <StyledBox width={1 / 3} mr={5}>
-            <TextField
-              style={{ width: "100%" }}
-              label="Vorname"
-              name="firstName"
-              values={values.firstName}
-              onChange={handleChange}
-              onBlur={handleBlur}
-              error={errors.firstName && touched.firstName}
-              helperText={
-                errors.firstName && touched.firstName ? errors.firstName : null
-              }
-            />
-          </StyledBox>
-          <StyledBox width={1 / 3} mr={5}>
-            <TextField
-              style={{ width: "100%" }}
-              label="Nachname"
-              name="lastName"
-              values={values.lastName}
-              onChange={handleChange}
-              onBlur={handleBlur}
-              error={errors.lastName && touched.lastName}
-              helperText={
-                errors.lastName && touched.lastName ? errors.lastName : null
-              }
-            />
-          </StyledBox>
+    <form onSubmit={handleSubmit}>
+      <Flex alignContent="center">
+        <StyledBox width={1 / 3} mr={5}>
+          <TextField
+            style={{ width: "100%" }}
+            label="Vorname"
+            name="firstName"
+            values={values.firstName}
+            onChange={handleChange}
+            onBlur={handleBlur}
+            error={errors.firstName && touched.firstName}
+            helperText={
+              errors.firstName && touched.firstName ? errors.firstName : null
+            }
+          />
+        </StyledBox>
+        <StyledBox width={1 / 3} mr={5}>
+          <TextField
+            style={{ width: "100%" }}
+            label="Nachname"
+            name="lastName"
+            values={values.lastName}
+            onChange={handleChange}
+            onBlur={handleBlur}
+            error={errors.lastName && touched.lastName}
+            helperText={
+              errors.lastName && touched.lastName ? errors.lastName : null
+            }
+          />
+        </StyledBox>
 
-          <StyledBox width={1 / 3}>
-            <TextField
-              style={{ width: "100%" }}
-              label="e-Mail"
-              name="email"
-              values={values.email}
+        <StyledBox width={1 / 3}>
+          <TextField
+            style={{ width: "100%" }}
+            label="e-Mail"
+            name="email"
+            values={values.email}
+            onChange={handleChange}
+            onBlur={handleBlur}
+            error={errors.email && touched.email}
+            helperText={errors.email && touched.email ? errors.email : null}
+          />
+        </StyledBox>
+      </Flex>
+      <Flex>
+        <StyledBox width={1 / 2} mr={5}>
+          <FormControl
+            style={{ width: "100%" }}
+            error={Boolean(errors.unit && touched.unit)}
+          >
+            <InputLabel>Abteilung</InputLabel>
+            <Select
+              name="unit"
               onChange={handleChange}
               onBlur={handleBlur}
-              error={errors.email && touched.email}
-              helperText={errors.email && touched.email ? errors.email : null}
-            />
-          </StyledBox>
-        </Flex>
-        <Flex>
-          <StyledBox width={1 / 2} mr={5}>
-            <FormControl
-              style={{ width: "100%" }}
-              error={Boolean(errors.unit && touched.unit)}
+              value={values.unit}
             >
-              <InputLabel>Abteilung</InputLabel>
-              <Select
-                name="unit"
-                onChange={handleChange}
-                onBlur={handleBlur}
-                value={values.unit}
-              >
-                <MenuItem value="Digital">Digital</MenuItem>
-                <MenuItem value="Vertrieb">Vertrieb</MenuItem>
-                <MenuItem value="Marketing">Marketing</MenuItem>
-              </Select>
-              {errors.unit && touched.unit ? (
-                <FormHelperText>{errors.unit}</FormHelperText>
-              ) : null}
-            </FormControl>
-          </StyledBox>
+              <MenuItem value="Digital">Digital</MenuItem>
+              <MenuItem value="Vertrieb">Vertrieb</MenuItem>
+              <MenuItem value="Marketing">Marketing</MenuItem>
+            </Select>
+            {errors.unit && touched.unit ? (
+              <FormHelperText>{errors.unit}</FormHelperText>
+            ) : null}
+          </FormControl>
+        </StyledBox>
 
-          <StyledBox width={1 / 2}>
-            <FormControl
-              style={{ width: "100%" }}
-              error={Boolean(errors.holidayType && touched.holidayType)}
+        <StyledBox width={1 / 2}>
+          <FormControl
+            style={{ width: "100%" }}
+            error={Boolean(errors.holidayType && touched.holidayType)}
+          >
+            <InputLabel>Art des Urlaubs</InputLabel>
+            <Select
+              name="holidayType"
+              onChange={handleChange}
+              onBlur={handleBlur}
+              value={values.holidayType}
             >
-              <InputLabel>Art des Urlaubs</InputLabel>
-              <Select
-                name="holidayType"
-                onChange={handleChange}
-                onBlur={handleBlur}
-                value={values.holidayType}
-              >
-                <MenuItem value="Erholungsurlaub">Erholungsurlaub</MenuItem>
-                <MenuItem value="Resturlaub">Resturlaub</MenuItem>
-                <MenuItem value="Ausgleich">Ausgleich</MenuItem>
-              </Select>
-              {errors.holidayType && touched.holidayType ? (
-                <FormHelperText>{errors.holidayType}</FormHelperText>
-              ) : null}
-            </FormControl>
-          </StyledBox>
-        </Flex>
-        <Flex>
-          <StyledBox width={1 / 2} mr={5}>
+              <MenuItem value="Erholungsurlaub">Erholungsurlaub</MenuItem>
+              <MenuItem value="Resturlaub">Resturlaub</MenuItem>
+              <MenuItem value="Ausgleich">Ausgleich</MenuItem>
+            </Select>
+            {errors.holidayType && touched.holidayType ? (
+              <FormHelperText>{errors.holidayType}</FormHelperText>
+            ) : null}
+          </FormControl>
+        </StyledBox>
+      </Flex>
+      <Flex>
+        <StyledBox width={1 / 2} mr={5}>
+          <FormControl
+            style={{ width: "100%" }}
+            error={Boolean(errors.dateFrom && touched.dateFrom)}
+          >
             <MuiPickersUtilsProvider utils={DateFnsUtils}>
               <KeyboardDatePicker
+                error={Boolean(errors.dateFrom && touched.dateFrom)}
                 style={{ width: "100%" }}
                 minDate={today}
                 margin="normal"
@@ -179,17 +193,25 @@ const FormikHolidayForm = (props) => {
                 }}
               />
             </MuiPickersUtilsProvider>
-          </StyledBox>
+            {errors.dateFrom && touched.dateFrom ? (
+              <FormHelperText>{errors.dateFrom}</FormHelperText>
+            ) : null}
+          </FormControl>
+        </StyledBox>
 
-          <StyledBox width={1 / 2}>
+        <StyledBox width={1 / 2}>
+          <FormControl
+            style={{ width: "100%" }}
+            error={Boolean(errors.dateTo && touched.dateTo)}
+          >
             <MuiPickersUtilsProvider utils={DateFnsUtils}>
               <KeyboardDatePicker
-                style={{ width: "100%" }}
+                error={Boolean(errors.dateTo && touched.dateTo)}
                 minDate={values.dateFrom}
                 minDateMessage="Endatum darf nicht vor dem Startdatum liegen"
                 margin="normal"
-                name="dateFrom"
-                label="Endatum   auswählen"
+                name="dateTo"
+                label="Enddatum auswählen"
                 format="dd/MM/yyyy"
                 value={values.dateTo}
                 onBlur={handleBlur}
@@ -199,24 +221,32 @@ const FormikHolidayForm = (props) => {
                 }}
               />
             </MuiPickersUtilsProvider>
-          </StyledBox>
-        </Flex>
-        <Flex justifyContent="center" mt={20}>
-          <Button
-            disabled={!formik.isValid}
-            variant="contained"
-            style={{
-              backgroundColor: formik.isValid ? "#003bb3 " : "",
-              color: "white",
-              width: "30%",
-            }}
-            onClick={handleSubmit}
-          >
-            Speichern
-          </Button>
-        </Flex>
-      </form>
-    </div>
+            {errors.dateTo && touched.dateTo ? (
+              <FormHelperText>{errors.dateTo}</FormHelperText>
+            ) : null}
+          </FormControl>
+        </StyledBox>
+      </Flex>
+      <Flex justifyContent="center" mt={40}>
+        <Button
+          disabled={isSubmitting || !formik.isValid}
+          variant="contained"
+          style={{
+            backgroundColor: formik.isValid ? "#003bb3 " : "",
+            color: "white",
+            width: "30%",
+          }}
+          onClick={handleSubmit}
+        >
+          Speichern
+        </Button>
+        {isSubmitting ? (
+          <div style={{ marginLeft: "20px" }}>
+            <CircularProgress />
+          </div>
+        ) : null}
+      </Flex>
+    </form>
   );
 };
 

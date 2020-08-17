@@ -3,6 +3,8 @@ import React from "react";
 import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
 
 import FormikHolidayForm from "../bookHoliday/holiday";
+import DisplayBookedHolidays from "../displayBookedHolidays";
+
 import Nav from "../nav";
 
 import styled from "styled-components";
@@ -22,9 +24,14 @@ function App() {
     <Router>
       <Nav />
       <Switch>
-        <Route exact path="/holiday">
+        <Route exact path="/">
           <Container alignItems="center" justifyContent="center">
             <FormikHolidayForm />
+          </Container>
+        </Route>
+        <Route exact path="/bookedHolidays">
+          <Container alignItems="center" justifyContent="center">
+            <DisplayBookedHolidays />
           </Container>
         </Route>
       </Switch>
