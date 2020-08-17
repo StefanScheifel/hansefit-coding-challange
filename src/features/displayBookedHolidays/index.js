@@ -1,6 +1,8 @@
 import React from "react";
-import { selectRequestedHolidays } from "../bookHoliday/holidaySlice";
+
 import { useSelector } from "react-redux";
+
+import { Flex } from "@rebass/grid";
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
@@ -10,7 +12,7 @@ import TableRow from "@material-ui/core/TableRow";
 import Paper from "@material-ui/core/Paper";
 import { withStyles } from "@material-ui/core/styles";
 
-import { Flex } from "@rebass/grid";
+import { selectRequestedHolidays } from "../bookHoliday/holidaySlice";
 
 const StyledTableCell = withStyles((theme) => ({
   head: {
@@ -35,7 +37,6 @@ function DisplayBookedHolidays() {
   console.log(requestedHolidays);
   return (
     <Flex alignContent="center">
-      {" "}
       <TableContainer component={Paper}>
         <Table>
           <TableHead>

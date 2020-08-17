@@ -182,6 +182,7 @@ const FormikHolidayForm = (props) => {
           >
             <MuiPickersUtilsProvider utils={DateFnsUtils}>
               <KeyboardDatePicker
+                autoOk
                 error={Boolean(errors.dateFrom && touched.dateFrom)}
                 style={FullWidth}
                 minDate={today}
@@ -189,6 +190,7 @@ const FormikHolidayForm = (props) => {
                 name="dateFrom"
                 label="Startdatum auswählen"
                 format="dd/MM/yyyy"
+                placeholder="dd/MM/yyyy"
                 value={values.dateFrom}
                 onBlur={handleBlur}
                 onChange={(e) => setFieldValue("dateFrom", e)}
@@ -210,6 +212,7 @@ const FormikHolidayForm = (props) => {
           >
             <MuiPickersUtilsProvider utils={DateFnsUtils}>
               <KeyboardDatePicker
+                autoOk
                 error={Boolean(errors.dateTo && touched.dateTo)}
                 minDate={values.dateFrom}
                 minDateMessage="Endatum darf nicht vor dem Startdatum liegen"
@@ -217,6 +220,7 @@ const FormikHolidayForm = (props) => {
                 name="dateTo"
                 label="Enddatum auswählen"
                 format="dd/MM/yyyy"
+                placeholder="dd/MM/yyyy"
                 value={values.dateTo}
                 onBlur={handleBlur}
                 onChange={(e) => setFieldValue("dateTo", e)}

@@ -2,22 +2,11 @@ import React from "react";
 
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 
+import Nav from "../nav";
 import FormikHolidayForm from "../bookHoliday/holiday";
 import DisplayBookedHolidays from "../displayBookedHolidays";
 
-import Nav from "../nav";
-
-import styled from "styled-components";
-
-import { Flex } from "@rebass/grid";
-
-const Container = styled(Flex)`
-  max-width: 1024px;
-  height: calc(100vh - 70px);
-`;
-Container.defaultProps = {
-  mx: "auto",
-};
+import Container from "./container";
 
 function App() {
   return (
