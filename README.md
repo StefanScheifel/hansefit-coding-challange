@@ -1,10 +1,10 @@
 
-Libarys Used: 
-Styled Components for CSS in JS 
-Formik for Form Handling
-Yup for Form Validation 
-UI Elements are from Material UI 
-Rebass/Grid for the layout/grid
+Libarys Used: \
+Styled Components for CSS in JS.\
+Formik for Form Handling.\
+Yup for Form Validation.\
+UI Elements are from Material UI.\
+Rebass/Grid for the layout/grid.\
 
 
 
