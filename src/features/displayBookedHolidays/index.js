@@ -34,7 +34,6 @@ const StyledTableRow = withStyles((theme) => ({
 
 function DisplayBookedHolidays() {
   const requestedHolidays = useSelector(selectRequestedHolidays);
-  console.log(requestedHolidays);
   return (
     <Flex alignContent="center">
       <TableContainer component={Paper}>
